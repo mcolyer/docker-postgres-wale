@@ -8,4 +8,25 @@ Environment variables to pass to the container for WAL-E, all of these must be p
 
 `AWS_SECRET_ACCESS_KEY`
 
-`WALE_S3_PREFIX=\"s3://<bucketname>/<path>\"`
+`WALE_S3_PREFIX=s3://<bucketname>/<path>`
+
+
+# AWS S3 security
+
+IAM Policy for backing up but not restore.
+
+`{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:Put*",
+                "s3:List*",
+                "s3:GetBucketLocation"
+            ],
+		    "Resource": "arn:aws:s3:::<bucketname>*"
+        }
+    ]
+}`
+
