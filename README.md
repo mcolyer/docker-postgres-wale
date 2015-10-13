@@ -15,7 +15,8 @@ Environment variables to pass to the container for WAL-E, all of these must be p
 
 IAM Policy for backup:
 
-```{
+```json
+{
     "Version": "2012-10-17",
     "Statement": [
         {
@@ -28,11 +29,13 @@ IAM Policy for backup:
 		    "Resource": "arn:aws:s3:::<bucketname>*"
         }
     ]
-}``` 
+}
+``` 
 
 IAM Policy for restore:
 
-```{
+```json
+{
     "Version": "2012-10-17",
     "Statement": [
         {
@@ -44,4 +47,5 @@ IAM Policy for restore:
             "Resource": "arn:aws:s3:::<bucketname>*"
         }
     ]
-}```
+}
+```
