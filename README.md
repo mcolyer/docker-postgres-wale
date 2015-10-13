@@ -13,9 +13,9 @@ Environment variables to pass to the container for WAL-E, all of these must be p
 
 # AWS S3 security
 
-IAM Policy for backing up but not restore:
+IAM Policy for backup:
 
-`{
+```{
     "Version": "2012-10-17",
     "Statement": [
         {
@@ -28,11 +28,11 @@ IAM Policy for backing up but not restore:
 		    "Resource": "arn:aws:s3:::<bucketname>*"
         }
     ]
-}`
+}``` 
 
 IAM Policy for restore:
 
-`{
+```{
     "Version": "2012-10-17",
     "Statement": [
         {
@@ -44,4 +44,4 @@ IAM Policy for restore:
             "Resource": "arn:aws:s3:::<bucketname>*"
         }
     ]
-}`
+}```
