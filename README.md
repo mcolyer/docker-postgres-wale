@@ -1,6 +1,20 @@
-# Postgres docker container with wale
+# Postgres 9.4 Docker container with WAL-E
 
 Based on https://github.com/docker-library/postgres with [WAL-E](https://github.com/wal-e/wal-e) installed.
+
+# Cron Configuration
+
+Since cron doesn't run inside containers you'll need to run the
+following commands on a recurring basis:
+
+```shell
+# Suggested cron definition: 0 3 * * *
+docker run <container> -u postgres /usr/bin/envdir /etc/wal-e.d/env /usr/local/bin/wal-e backup-push /var/lib/postgresql/data
+# Suggested cron definition: 0 4 * * *
+docker run <container> -u postgres /usr/bin/envdir /etc/wal-e.d/env /usr/local/bin/wal-e delete --confirm retain 7
+```
+
+## AWS Configuration
 
 Environment variables to pass to the container for WAL-E, all of these must be present or WAL-E is not configured.
 
@@ -11,7 +25,7 @@ Environment variables to pass to the container for WAL-E, all of these must be p
 `WALE_S3_PREFIX=s3://<bucketname>/<path>`
 
 
-# AWS S3 security
+## AWS S3 security
 
 IAM Policy for backup:
 
@@ -30,7 +44,7 @@ IAM Policy for backup:
         }
     ]
 }
-``` 
+```
 
 IAM Policy for restore:
 
