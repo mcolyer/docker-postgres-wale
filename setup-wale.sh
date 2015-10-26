@@ -22,7 +22,7 @@ echo "archive_command = 'envdir /etc/wal-e.d/env-archive /usr/local/bin/wal-e wa
 echo "archive_timeout = 60" >> /var/lib/postgresql/data/postgresql.conf
 
 # Restore from the latest backup if RESTORE_S3_PREFIX is set
-if [ "$RESTORE_S3_PREFIX" = "" ]; then
+if [ "$RESTORE_S3_PREFIX" != "" ]; then
   mkdir -p /etc/wal-e.d/env-restore
   cp /etc/wal-e.d/env-archive/* /etc/wal-e.d/env-restore/
   echo "$RESTORE_S3_PREFIX" > /etc/wal-e.d/env-restore/WALE_S3_PREFIX
