@@ -29,9 +29,13 @@ if [ "$RESTORE_S3_PREFIX" != "" ]; then
   chown -R root:postgres /etc/wal-e.d
 
   if [ ! -f /var/lib/postgresql/data/recovery.done ]; then
-    /usr/bin/envdir /etc/wal-e.d/env-restore /usr/local/bin/wal-e backup-fetch /var/lib/postgresql/data/ LATEST
+    gosu postgres pg_ctl -D "$PGDATA" -m fast -w stop
 
+    /usr/bin/envdir /etc/wal-e.d/env-restore /usr/local/bin/wal-e backup-fetch --blind-restore /var/lib/postgresql/data/ LATEST
     echo "restore_command = '/usr/bin/envdir /etc/wal-e.d/env-restore /usr/local/bin/wal-e wal-fetch \"%f\" \"%p\"'" >> /var/lib/postgresql/data/recovery.conf
+    chown postgres:postgres /var/lib/postgresql/data/recovery.conf
+
+    gosu postgres pg_ctl -D "$PGDATA" -o "-c listen_addresses=''" -w start
   fi
 
 fi
