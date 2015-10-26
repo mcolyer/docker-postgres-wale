@@ -2,7 +2,7 @@
 
 Based on https://github.com/docker-library/postgres with [WAL-E](https://github.com/wal-e/wal-e) installed.
 
-# Cron Configuration
+## Cron Configuration
 
 Since cron doesn't run inside containers you'll need to run the
 following commands on a recurring basis:
@@ -18,11 +18,11 @@ docker run <container> -u postgres /usr/bin/envdir /etc/wal-e.d/env /usr/local/b
 
 Environment variables to pass to the container for WAL-E, all of these must be present or WAL-E is not configured.
 
-`AWS_ACCESS_KEY_ID`
-
-`AWS_SECRET_ACCESS_KEY`
-
-`WALE_S3_PREFIX=s3://<bucketname>/<path>`
+* `AWS_ACCESS_KEY_ID`
+* `AWS_SECRET_ACCESS_KEY`
+* `ARCHIVE_S3_PREFIX=s3://<bucketname>/<path>`
+* `RESTORE_S3_PREFIX=s3://<bucketname>/<path>` - optional, if present
+  the latest backup is used to initialize the database.
 
 
 ## AWS S3 security
