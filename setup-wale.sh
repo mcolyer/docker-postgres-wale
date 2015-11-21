@@ -35,7 +35,12 @@ if [ "$RESTORE_S3_PREFIX" != "" ]; then
     echo "restore_command = '/usr/bin/envdir /etc/wal-e.d/env-restore /usr/local/bin/wal-e wal-fetch \"%f\" \"%p\"'" >> /var/lib/postgresql/data/recovery.conf
     chown postgres:postgres /var/lib/postgresql/data/recovery.conf
 
-    gosu postgres pg_ctl -D "$PGDATA" -o "-c listen_addresses=''" -w start
-  fi
+    gosu postgres pg_ctl -D "$PGDATA" -o "-c listen_addresses=''" -w start -t 600
 
+    echo "Resetting Password"
+    psql --username postgres <<EOSQL
+      ALTER USER "$POSTGRES_USER" WITH SUPERUSER PASSWORD '$POSTGRES_PASSWORD';
+EOSQL
+    echo "Complete"
+  fi
 fi
