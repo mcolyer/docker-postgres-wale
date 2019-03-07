@@ -13,7 +13,6 @@ mkdir -p /etc/wal-e.d/env-archive
 echo "$AWS_SECRET_ACCESS_KEY" > /etc/wal-e.d/env-archive/AWS_SECRET_ACCESS_KEY
 echo "$AWS_ACCESS_KEY_ID" > /etc/wal-e.d/env-archive/AWS_ACCESS_KEY_ID
 echo "$ARCHIVE_S3_PREFIX" > /etc/wal-e.d/env-archive/WALE_S3_PREFIX
-chown -R root:postgres /etc/wal-e.d
 
 # Setup the archive wal-e configuration
 echo "wal_level = archive" >> /var/lib/postgresql/data/postgresql.conf
@@ -26,16 +25,15 @@ if [ "$RESTORE_S3_PREFIX" != "" ]; then
   mkdir -p /etc/wal-e.d/env-restore
   cp /etc/wal-e.d/env-archive/* /etc/wal-e.d/env-restore/
   echo "$RESTORE_S3_PREFIX" > /etc/wal-e.d/env-restore/WALE_S3_PREFIX
-  chown -R root:postgres /etc/wal-e.d
 
   if [ ! -f /var/lib/postgresql/data/recovery.done ]; then
-    gosu postgres pg_ctl -D "$PGDATA" -m fast -w stop
+    pg_ctl -D "$PGDATA" -m immediate stop
 
     /usr/bin/envdir /etc/wal-e.d/env-restore /usr/local/bin/wal-e backup-fetch --blind-restore /var/lib/postgresql/data/ LATEST
     echo "restore_command = '/usr/bin/envdir /etc/wal-e.d/env-restore /usr/local/bin/wal-e wal-fetch \"%f\" \"%p\"'" >> /var/lib/postgresql/data/recovery.conf
     chown postgres:postgres /var/lib/postgresql/data/recovery.conf
 
-    gosu postgres pg_ctl -D "$PGDATA" -o "-c listen_addresses=''" -w start -t 600
+    pg_ctl -D "$PGDATA" -o "-c listen_addresses=''" start -t 600
 
     echo "Resetting Password"
     psql --username postgres <<EOSQL
