@@ -1,4 +1,4 @@
-# Postgres 11.1 Docker container with WAL-E
+# Postgres 11.5 Docker container with WAL-E
 
 Based on https://github.com/docker-library/postgres with [WAL-E](https://github.com/wal-e/wal-e) installed.
 

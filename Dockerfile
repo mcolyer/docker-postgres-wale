@@ -1,4 +1,4 @@
-FROM postgres:11.1
+FROM postgres:11.5
 
 MAINTAINER Matt Colyer
 
